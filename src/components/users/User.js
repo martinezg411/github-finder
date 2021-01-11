@@ -1,5 +1,6 @@
 import React, { useEffect, useContext, Fragment } from 'react';
 import Spinner from '../layout/Spinner';
+import NotFound from '../pages/NotFound';
 import { Link } from 'react-router-dom';
 import Repos from '../repos/Repos';
 import GithubContext from '../../context/github/githubContext';
@@ -11,6 +12,7 @@ const User = ({ match }) => {
   useEffect(() => {
     getUser(match.params.login);
     getUserRepos(match.params.login);
+
     // eslint-disable-next-line
   }, []);
 
@@ -33,6 +35,11 @@ const User = ({ match }) => {
   if (loading) {
     return <Spinner />;
   }
+
+  if (Object.keys(user).length === 0 && repos.length === 0) {
+    return <NotFound message="User does not exist" />;
+  }
+
   return (
     <Fragment>
       <Link to="/" className="btn btn-light">
